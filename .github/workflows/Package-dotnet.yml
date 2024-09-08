@@ -1,0 +1,57 @@
+name: Package-dotnet
+
+on:
+  workflow_call:
+    inputs:
+        dotnet-version:
+            required: true
+            type: string
+        configuration:
+            required: true
+            type: string
+        upload-artifact:
+            required: false
+            type: boolean
+        artifact-name:
+          required: false
+          type: string
+        bin-dir:
+          required: false
+          type: string
+    outputs:
+      artifact-id:
+        description: "The ID of the uploaded artifact, if upload-artifact is set to true"
+        value: ${{ jobs.package.outputs.artifact-id }}
+
+permissions:
+  packages: write
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    outputs:
+      artifact-id: ${{ steps.upload-artifact.outputs.artifact-id }}
+
+    steps:
+    - name: Checkout Project
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ inputs.dotnet-version }}
+
+    - name: Create Nuget Package
+      run: dotnet pack --configuration ${{ inputs.configuration }}
+
+    - name: Upload Artifact
+      id: upload-artifact
+      if: "${{ inputs.upload-artifact }}"
+      uses: actions/upload-artifact@v4
+      with:
+        if-no-files-found: error
+        name: "${{ inputs.artifact-name }}"
+        path: "${{ inputs.bin-dir }}/bin/${{ inputs.configuration }}/*.nupkg"
+

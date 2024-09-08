@@ -1,0 +1,28 @@
+name: Build-dotnet
+
+on:
+  workflow_call:
+    inputs:
+        dotnet-version:
+            required: true
+            type: string
+        configuration:
+            required: true
+            type: string
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Project
+      uses: actions/checkout@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ inputs.dotnet-version }}
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build Release Config
+      run: dotnet build --no-restore --configuration ${{ inputs.configuration }}

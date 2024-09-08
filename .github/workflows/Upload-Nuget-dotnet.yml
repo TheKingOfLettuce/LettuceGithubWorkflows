@@ -1,0 +1,53 @@
+name: Upload-Nuget-dotnet.yml
+
+on:
+  workflow_call:
+    inputs:
+        dotnet-version:
+            required: true
+            type: string
+        configuration:
+            required: true
+            type: string
+        artifact-name:
+          required: true
+          type: string
+        bin-dir:
+          required: true
+          type: string
+        nuget-source:
+          required: true
+          type: string
+    secrets:
+      GITHUB_TOKEN:
+        required: true
+
+permissions:
+  packages: write
+  contents: read
+
+jobs:
+  generate-package:
+    uses:
+      TheKingOfLettuce/LettuceGithubWorkflows/.github/workflows/Package-dotnet.yml@main
+    with:
+      dotnet-version: ${{ inputs.dotnet-version }}
+      configuration: ${{ inputs.configuration }}
+      upload-artifact: true
+      artifact-name: ${{ inputs.artifact-name }}
+      bin-dir: ${{ inputs.bin-dir }}
+
+  push-package:
+    runs-on: ubuntu-latest
+    needs: generate-package
+    steps:
+    - name: Download Package Artifact
+      uses: actions/download-artifact@v4
+      id: download-package
+      with:
+        name: ${{ inputs.artifact-name }}
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        run-id: ${{ needs.generate-package.outputs.artifact-id }}
+
+    - name: Push Nuget Package
+      run: dotnet nuget push ${{ steps.download-package.outputs.download-path }} --api-key ${{ secrets.GITHUB_TOKEN }} --source ${{ inputs.nuget-source }}
