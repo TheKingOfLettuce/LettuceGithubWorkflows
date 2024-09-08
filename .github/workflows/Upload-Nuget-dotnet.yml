@@ -19,7 +19,7 @@ on:
           required: true
           type: string
     secrets:
-      github-token:
+      nuget-api-key:
         required: true
 
 permissions:
@@ -47,8 +47,7 @@ jobs:
       id: download-package
       with:
         name: ${{ inputs.artifact-name }}
-        github-token: ${{ secrets.github-token }}
         run-id: ${{ needs.package-artifact.outputs.artifact-id }}
 
     - name: Push Nuget Package
-      run: dotnet nuget push ${{ steps.download-package.outputs.download-path }} --api-key ${{ secrets.github-token }} --source ${{ inputs.nuget-source }}
+      run: dotnet nuget push ${{ steps.download-package.outputs.download-path }} --api-key ${{ secrets.nuget-api-key }} --source ${{ inputs.nuget-source }}
