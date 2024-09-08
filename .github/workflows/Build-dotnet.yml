@@ -11,7 +11,7 @@ on:
             type: string
 
 jobs:
-  build:
+  build-project:
 
     runs-on: ubuntu-latest
 

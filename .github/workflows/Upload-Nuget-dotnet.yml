@@ -24,10 +24,11 @@ on:
 
 permissions:
   packages: write
+  actions: read
   contents: read
 
 jobs:
-  generate-package:
+  package-artifact:
     uses:
       TheKingOfLettuce/LettuceGithubWorkflows/.github/workflows/Package-dotnet.yml@main
     with:
@@ -39,7 +40,7 @@ jobs:
 
   push-package:
     runs-on: ubuntu-latest
-    needs: generate-package
+    needs: package-artifact
     steps:
     - name: Download Package Artifact
       uses: actions/download-artifact@v4
@@ -47,7 +48,7 @@ jobs:
       with:
         name: ${{ inputs.artifact-name }}
         github-token: ${{ secrets.github-token }}
-        run-id: ${{ needs.generate-package.outputs.artifact-id }}
+        run-id: ${{ needs.package-artifact.outputs.artifact-id }}
 
     - name: Push Nuget Package
       run: dotnet nuget push ${{ steps.download-package.outputs.download-path }} --api-key ${{ secrets.github-token }} --source ${{ inputs.nuget-source }}

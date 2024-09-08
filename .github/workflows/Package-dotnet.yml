@@ -21,14 +21,10 @@ on:
     outputs:
       artifact-id:
         description: "The ID of the uploaded artifact, if upload-artifact is set to true"
-        value: ${{ jobs.package.outputs.artifact-id }}
-
-permissions:
-  packages: write
-  contents: read
+        value: ${{ jobs.create-package.outputs.artifact-id }}
 
 jobs:
-  package:
+  create-package:
     runs-on: ubuntu-latest
 
     outputs:
