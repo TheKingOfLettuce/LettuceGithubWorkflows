@@ -50,4 +50,4 @@ jobs:
         run-id: ${{ needs.package-artifact.outputs.artifact-id }}
 
     - name: Push Nuget Package
-      run: dotnet nuget push ${{ steps.download-package.outputs.download-path }} --api-key ${{ secrets.nuget-api-key }} --source ${{ inputs.nuget-source }}
+      run: dotnet nuget push ${{ steps.download-package.outputs.download-path }}/*.nupkg --api-key ${{ secrets.nuget-api-key }} --source ${{ inputs.nuget-source }}
