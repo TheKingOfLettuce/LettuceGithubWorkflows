@@ -27,6 +27,6 @@ jobs:
       with:
         dotnet-version: ${{ inputs.dotnet-version }}
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ${{ inputs.project-path }}
     - name: Build Release Config
       run: dotnet build ${{ inputs.project-path }} --no-restore --configuration ${{ inputs.configuration }}
