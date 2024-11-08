@@ -18,6 +18,10 @@ on:
         bin-dir:
           required: false
           type: string
+        project-dir:
+          required: false
+          type: string
+          default: ""
     outputs:
       artifact-id:
         description: "The ID of the uploaded artifact, if upload-artifact is set to true"
@@ -40,7 +44,7 @@ jobs:
         dotnet-version: ${{ inputs.dotnet-version }}
 
     - name: Create Nuget Package
-      run: dotnet pack --configuration ${{ inputs.configuration }}
+      run: dotnet pack ${{ inputs.project-dir }} --configuration ${{ inputs.configuration }}
 
     - name: Upload Artifact
       id: upload-artifact
