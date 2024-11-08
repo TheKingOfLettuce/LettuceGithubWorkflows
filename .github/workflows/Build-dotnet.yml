@@ -9,7 +9,7 @@ on:
         configuration:
             required: true
             type: string
-        project-dir:
+        project-path:
           required: false
           type: string
           default: ""
@@ -29,4 +29,4 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build Release Config
-      run: dotnet build ${{ inputs.project-dir }} --no-restore --configuration ${{ inputs.configuration }}
+      run: dotnet build ${{ inputs.project-path }} --no-restore --configuration ${{ inputs.configuration }}

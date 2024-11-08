@@ -18,7 +18,7 @@ on:
         bin-dir:
           required: false
           type: string
-        project-dir:
+        project-path:
           required: false
           type: string
           default: ""
@@ -44,7 +44,7 @@ jobs:
         dotnet-version: ${{ inputs.dotnet-version }}
 
     - name: Create Nuget Package
-      run: dotnet pack ${{ inputs.project-dir }} --configuration ${{ inputs.configuration }}
+      run: dotnet pack ${{ inputs.project-path }} --configuration ${{ inputs.configuration }}
 
     - name: Upload Artifact
       id: upload-artifact
