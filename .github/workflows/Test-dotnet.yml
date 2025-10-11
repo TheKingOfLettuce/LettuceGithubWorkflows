@@ -1,4 +1,4 @@
-name: Build-dotnet
+name: Test-dotnet
 
 on:
   workflow_call:
@@ -15,7 +15,7 @@ on:
           default: ""
 
 jobs:
-  build-project:
+  test-project:
 
     runs-on: ubuntu-latest
 
@@ -28,5 +28,5 @@ jobs:
         dotnet-version: ${{ inputs.dotnet-version }}
     - name: Restore dependencies
       run: dotnet restore ${{ inputs.project-path }}
-    - name: Build Config
-      run: dotnet build ${{ inputs.project-path }} --no-restore --configuration ${{ inputs.configuration }}
+    - name: Test Project
+      run: dotnet test ${{ inputs.project-path }} --no-restore --configuration ${{ inputs.configuration }}
