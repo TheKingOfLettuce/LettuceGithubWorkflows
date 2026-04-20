@@ -13,6 +13,10 @@ on:
           required: false
           type: string
           default: ""
+        run-tests:
+          required: false
+          type: boolean
+          default: false
 
 jobs:
   build-dotnet:
@@ -30,3 +34,6 @@ jobs:
       run: dotnet restore ${{ inputs.project-path }}
     - name: Build Config
       run: dotnet build ${{ inputs.project-path }} --no-restore --configuration ${{ inputs.configuration }}
+    - name: Test Config
+      if: ${{ success() && inputs.run-tests }}
+      run: dotnet test ${{ inputs.project-path }} --no-build --configuration ${{ inputs.configuration }}
