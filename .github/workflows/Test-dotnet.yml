@@ -15,7 +15,7 @@ on:
           default: ""
 
 jobs:
-  test-project:
+  test-dotnet:
 
     runs-on: ubuntu-latest
 

@@ -15,15 +15,15 @@ on:
           default: ""
 
 jobs:
-  build-project:
+  build-dotnet:
 
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Project
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v5
       with:
         dotnet-version: ${{ inputs.dotnet-version }}
     - name: Restore dependencies
